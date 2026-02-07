@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <!--
+        This file is intentionally left blank.
+        The SaleOrderButton has been moved from this screen into the ControlButtons component
+        to place it next to the "Note" button as requested.
+    -->
+</templates>

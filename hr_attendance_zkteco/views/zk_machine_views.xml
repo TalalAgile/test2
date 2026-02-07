@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zk_machine_form" model="ir.ui.view">
+        <field name="name">zk.machine.form</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <form string="ZK Machine">
+                <header>
+                    <button name="test_connection" string="Test Connection" type="object" class="oe_highlight"/>
+                    <button name="sync_attendance" string="Sync Attendance" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="E.g. Main Entrance"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="connection" string="Connection Details">
+                            <field name="ip_address"/>
+                            <field name="port"/>
+                            <field name="timeout"/>
+                            <field name="connection_method"/>
+                            <field name="ommit_ping"/>
+                        </group>
+
+                        <group name="status" string="Status">
+                            <field name="is_active"/>
+                            <field name="last_sync_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_machine_tree" model="ir.ui.view">
+        <field name="name">zk.machine.list</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <list string="ZK Machines">
+                <field name="name"/>
+                <field name="ip_address"/>
+                <field name="port"/>
+                <field name="last_sync_date"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_zk_machine" model="ir.actions.act_window">
+        <field name="name">ZK Attendance Machines</field>
+        <field name="res_model">zk.machine</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem id="menu_zk_attendance_root" 
+              name="ZK Attendance" 
+              parent="hr_attendance.menu_hr_attendance_root" 
+              sequence="50"/>
+
+    <menuitem id="menu_zk_machine_config" 
+              name="ZK Machines" 
+              parent="menu_zk_attendance_root" 
+              action="action_zk_machine" 
+              sequence="10"/>
+</odoo>

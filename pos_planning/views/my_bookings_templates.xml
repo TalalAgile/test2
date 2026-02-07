@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Breadcrumbs for Bookings -->
+    <template id="portal_my_home_menu_bookings" name="Portal layout : booking menu entries" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'booking' or booking" class="breadcrumb-item active">
+                <a t-if="booking" href="/my/bookings">Bookings</a>
+                <t t-else="">Bookings</t>
+            </li>
+            <li t-if="booking" class="breadcrumb-item active">
+                <t t-esc="booking.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <!-- 2. Portal Home Doc Card for Bookings -->
+    <template id="portal_my_home_bookings" name="Portal My Home : booking entries" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/planning/static/description/icon.png'"/>
+                <t t-set="title">Bookings</t>
+                <t t-set="text">View your scheduled appointments and shift assignments</t>
+                <t t-set="url" t-value="'/my/bookings'"/>
+                <t t-set="placeholder_count" t-value="'booking_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 3. Bookings List View -->
+    <template id="portal_my_bookings" name="My Bookings">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Bookings</t>
+            </t>
+            <t t-if="not slots">
+                <p class="alert alert-warning">There are currently no scheduled assignments for your account.</p>
+            </t>
+            <t t-if="slots" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Booking</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+
+                </thead>
+                <t t-foreach="slots" t-as="slot">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/bookings/#{slot.id}"><t t-esc="slot.name"/></a>
+                        </td>
+                        <td>
+                            <span t-field="slot.start_datetime" t-options='{"widget": "datetime"}'/>
+                        </td>
+                        <td>
+                            <span t-field="slot.end_datetime" t-options='{"widget": "datetime"}'/>
+                        </td>
+
+                        <td class="text-center">
+                            <span t-if="slot.booking_status == 'not_started'" class="badge rounded-pill text-bg-secondary">Scheduled</span>
+                            <span t-if="slot.booking_status == 'ongoing'" class="badge rounded-pill text-bg-info">Ongoing</span>
+                            <span t-if="slot.booking_status == 'finished'" class="badge rounded-pill text-bg-success">Finished</span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <div t-if="pager" class="o_portal_pager d-flex justify-content-center mt-3">
+                <t t-call="portal.pager"/>
+            </div>
+        </t>
+    </template>
+
+    <!-- 4. Booking Detail Page -->
+    <template id="portal_booking_page" name="My Booking Detail">
+        <t t-call="portal.portal_layout">
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0" t-field="booking.name"/>
+                    <span t-if="booking.booking_status == 'not_started'" class="badge rounded-pill text-bg-secondary">Scheduled</span>
+                    <span t-if="booking.booking_status == 'ongoing'" class="badge rounded-pill text-bg-info">Ongoing</span>
+                    <span t-if="booking.booking_status == 'finished'" class="badge rounded-pill text-bg-success">Finished</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <strong>Date &amp; Time:</strong><br/>
+                            <span t-field="booking.start_datetime" t-options='{"widget": "datetime"}'/>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <strong>Customer:</strong><br/>
+                            <span t-field="booking.partner_id.name"/>
+                            <t t-if="booking.phone">
+                                <br/><i class="fa fa-phone"/> <span t-field="booking.phone"/>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="row mt-3" t-if="booking.booking_line_ids">
+                        <div class="col-12">
+                            <strong>Services:</strong>
+                            <div class="mt-2">
+                                <t t-foreach="booking.booking_line_ids" t-as="service">
+                                    <span class="badge bg-light text-dark border me-1"><t t-esc="service.name"/></span>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

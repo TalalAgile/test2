@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="booking_page" name="Planning Booking">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <style>
+                    /* Animation and Transitions */
+                    .transition { transition: all 0.3s ease; }
+                    .hover-scale:hover { transform: scale(1.02); }
+                    .hover-border-primary:hover { border-color: #714B67 !important; }
+                    .pointer { cursor: pointer; }
+
+                    /* Custom Styling */
+                    .booking-container { max-width: 1200px; margin: 0 auto; }
+                    .step-item { cursor: pointer; }
+                    .step-item.active { color: #714B67; font-weight: bold; }
+                    .location-card, .service-card, .professional-card, .time-slot, .date-item {
+                        border: 2px solid transparent !important;
+                    }
+                    .location-card.border-primary, .service-card.border-primary,
+                    .professional-card.border-primary, .time-slot.active, .date-item.active {
+                        border-color: #714B67 !important;
+                    }
+
+                    /* Scrollbar */
+                    .no-scrollbar::-webkit-scrollbar { display: none; }
+                    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+                    /* Professional Cards */
+                    .professional-card img { filter: grayscale(20%); transition: all 0.3s; }
+                    .professional-card:hover img { filter: grayscale(0%); }
+
+                    /* Specialist Grid Styles */
+                    .specialist-selection-card {
+                        transition: transform 0.2s;
+                    }
+                    .specialist-selection-card:hover {
+                        transform: translateY(-2px);
+                    }
+                    .hover-bg-light:hover { background-color: #f8f9fa; }
+                    .hover-shadow:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
+                    .transition { transition: all 0.2s ease-in-out; }
+
+                    /* Specialist Selection Modal */
+                    .specialist-modal-overlay {
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                        background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+                        z-index: 9999; display: flex; align-items: center; justify-content: center;
+                    }
+                    .specialist-modal-container {
+                        background: #fff; width: 90%; max-width: 500px; max-height: 85vh;
+                        border-radius: 24px; overflow: hidden; display: flex; flex-direction: column;
+                        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalIn 0.3s ease-out;
+                    }
+                    @keyframes modalIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+                    .specialist-modal-header { padding: 24px; border-bottom: 1px solid #eee; }
+                    .specialist-list { overflow-y: auto; padding: 12px; }
+                    .specialist-item {
+                        padding: 16px; border-radius: 16px; transition: all 0.2s;
+                        display: flex; align-items: center; gap: 16px; cursor: pointer;
+                    }
+                    .specialist-item:hover { background: #f8f9fa; transform: translateX(8px); }
+                    .specialist-item img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+                </style>
+
+                <div class="bg-light min-vh-100 py-5">
+                    <div class="container booking-container">
+                        <!-- Header / Progress -->
+                        <div class="row mb-5">
+                            <div class="col-12 text-center">
+                                <div class="d-flex justify-content-center gap-4 border-bottom pb-3 overflow-auto no-scrollbar booking-steps">
+                                    <span class="step-item active px-3 py-2 text-nowrap" data-step="1">1. Branch</span>
+                                    <i class="fa fa-chevron-right my-auto text-muted small"/>
+                                    <span class="step-item px-3 py-2 text-nowrap opacity-50" data-step="2">2. Services</span>
+                                    <i class="fa fa-chevron-right my-auto text-muted small"/>
+                                    <span class="step-item px-3 py-2 text-nowrap opacity-50" data-step="3">3. Professional</span>
+                                    <i class="fa fa-chevron-right my-auto text-muted small"/>
+                                    <span class="step-item px-3 py-2 text-nowrap opacity-50" data-step="4">4. Time</span>
+                                    <i class="fa fa-chevron-right my-auto text-muted small"/>
+                                    <span class="step-item px-3 py-2 text-nowrap opacity-50" data-step="5">5. Review</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- Main Content -->
+                            <div class="col-lg-8">
+                                <!-- Step 1: Location -->
+                                <div id="step_1" class="booking-step">
+                                    <div class="d-flex align-items-center justify-content-between mb-4">
+                                        <h1 class="fw-bold mb-0">Select Branch</h1>
+                                        <div class="badge bg-white text-dark border px-3 py-2 rounded-pill">Required</div>
+                                    </div>
+                                    <div class="row g-4">
+                                        <t t-foreach="locations" t-as="loc">
+                                            <div class="col-md-6">
+                                                <div
+                                                    class="location-card p-4 bg-white rounded-3 shadow-sm border border-transparent hover-border-primary pointer h-100"
+                                                    t-att-data-location-id="loc.id"
+                                                    t-att-data-location-name="loc.name"
+                                                >
+                                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                                        <div class="bg-light rounded-circle p-3">
+                                                            <i class="fa fa-map-marker text-primary fs-4"/>
+                                                        </div>
+                                                        <h4 class="fw-bold mb-0" t-esc="loc.name"/>
+                                                    </div>
+                                                    <p class="text-muted small mb-0">Book appointments for this branch.</p>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Step 2: Services -->
+                                <div id="step_2" class="booking-step d-none">
+                                    <button class="btn btn-link back-btn text-decoration-none p-0 mb-3" data-back-to="1">
+                                        <i class="fa fa-arrow-left me-1"/> Change Branch
+                                    </button>
+                                    <h1 class="fw-bold mb-4">Select Services</h1>
+                                    <div class="d-flex flex-column gap-3">
+                                        <t t-foreach="products" t-as="product">
+                                            <div
+                                                class="service-card p-4 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-between border border-transparent hover-border-primary pointer position-relative"
+                                                t-att-data-product-id="product.id"
+                                                t-att-data-product-name="product.display_name"
+                                                t-att-data-product-price="product.lst_price"
+                                                t-att-data-duration="product.booking_duration"
+                                            >
+                                                <div class="flex-grow-1">
+                                                    <h4 class="fw-bold mb-1" t-esc="product.name"/>
+                                                    <div class="text-muted small mb-2">
+                                                        <t t-esc="int(product.booking_duration)"/> min
+                                                    </div>
+                                                    <div class="fw-bold text-dark">JOD <t t-esc="product.lst_price"/></div>
+                                                </div>
+                                                <button
+                                                    class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                                    style="width: 35px; height: 35px;"
+                                                >
+                                                    <i class="fa fa-plus"/>
+                                                </button>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <button id="services_continue_btn" class="btn btn-primary btn-lg w-100 mt-4 d-none rounded-pill shadow">Continue to Specialists</button>
+                                </div>
+
+                                <!-- Step 3: Professionals -->
+                                <div id="step_3" class="booking-step d-none">
+                                    <button class="btn btn-link back-btn text-decoration-none p-0 mb-3" data-back-to="2">
+                                        <i class="fa fa-arrow-left me-1"/> Back to Services
+                                    </button>
+                                    <h1 class="fw-bold mb-4">Choose Specialist</h1>
+
+                                    <div class="professional-options-grid d-flex flex-column gap-3">
+                                        <!-- Option: Any -->
+                                        <div
+                                            class="professional-card p-4 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-between border pointer hover-border-primary"
+                                            data-mode="any"
+                                        >
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="bg-light rounded-circle p-3">
+                                                    <i class="fa fa-users text-dark fs-4"/>
+                                                </div>
+                                                <div>
+                                                    <h5 class="fw-bold mb-0">Any Professional</h5>
+                                                    <span class="text-muted small">Fastest availability</span>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-dark rounded-pill px-4">Select</button>
+                                        </div>
+
+                                        <!-- Option: Multi -->
+                                        <div
+                                            class="professional-card p-4 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-between border pointer hover-border-primary"
+                                            data-mode="per_service"
+                                        >
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="bg-light rounded-circle p-3">
+                                                    <i class="fa fa-list-ul text-dark fs-4"/>
+                                                </div>
+                                                <div>
+                                                    <h5 class="fw-bold mb-0">Different Professionals</h5>
+                                                    <span class="text-muted small">Select per service</span>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-dark rounded-pill px-4">Choose</button>
+                                        </div>
+
+                                        <!-- Individual Professionals -->
+                                        <t t-foreach="resources" t-as="resource">
+                                            <div
+                                                class="professional-card p-4 bg-white rounded-3 shadow-sm d-flex align-items-center justify-content-between border pointer hover-border-primary"
+                                                data-mode="single"
+                                                t-att-data-resource-id="resource.id"
+                                                t-att-data-resource-name="resource.name"
+                                                t-att-data-pos-config-ids="','.join(map(str, resource.employee_id.pos_config_ids.ids)) if resource.employee_id else ''"
+                                            >
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <img
+                                                        t-attf-src="/web/image/resource.resource/{{resource.id}}/avatar_128"
+                                                        class="rounded-circle shadow-sm"
+                                                        style="width: 60px; height: 60px; object-fit: cover;"
+                                                        onerror="this.src='/web/static/img/placeholder.png'"
+                                                    />
+                                                    <div>
+                                                        <h5 class="fw-bold mb-0" t-esc="resource.name"/>
+                                                        <div class="text-warning small">
+                                                            <i class="fa fa-star"/> 4.9 (150)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-light rounded-pill px-4 border">Select</button>
+                                            </div>
+                                        </t>
+                                    </div>
+
+                                    <!-- Multi-Selection Mode -->
+                                    <div id="per_service_selection_container" class="d-none">
+                                        <div id="per_service_list"></div>
+                                        <button id="per_service_continue_btn" class="btn btn-primary btn-lg w-100 mt-4 rounded-pill shadow">Confirm Selection</button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 4: Time Selection -->
+                                <div id="step_4" class="booking-step d-none">
+                                    <button class="btn btn-link back-btn text-decoration-none p-0 mb-3" data-back-to="3">
+                                        <i class="fa fa-arrow-left me-1"/> Back to Professionals
+                                    </button>
+                                    <h1 class="fw-bold mb-4">Choose Time</h1>
+                                    <!-- Simple Horizontal Date Picker -->
+                                    <div id="date_picker_container" class="d-flex gap-3 overflow-auto no-scrollbar pb-4 mb-4"></div>
+                                    <div id="time_slots_container" class="mt-4"></div>
+                                </div>
+
+                                <!-- Step 5: Final Confirmation -->
+                                <div id="step_5" class="booking-step d-none">
+                                    <button class="btn btn-link back-btn text-decoration-none p-0 mb-3" data-back-to="4">
+                                        <i class="fa fa-arrow-left me-1"/> Change Time
+                                    </button>
+                                    <h1 class="fw-bold mb-4">Confirm Booking</h1>
+                                    <div id="summary_content" class="mb-4"></div>
+
+                                    <div class="bg-white p-4 rounded-4 shadow-sm border mb-4">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Contact Name</label>
+                                            <input type="text" id="confirm_name" class="form-control form-control-lg bg-light border-0" placeholder="e.g. John Doe"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Country</label>
+                                            <select id="confirm_country" class="form-select form-select-lg bg-light border-0">
+                                                <option value="">Select Country...</option>
+                                                <t t-foreach="countries" t-as="country">
+                                                    <option t-att-value="country.id" t-esc="country.name"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="mb-0">
+                                            <label class="form-label text-muted small fw-bold text-uppercase">Phone Number</label>
+                                            <input type="text" id="confirm_phone" class="form-control form-control-lg bg-light border-0" placeholder="e.g. 079 XXX XXXX"/>
+                                        </div>
+                                    </div>
+                                    <button id="final_confirm_btn" class="btn btn-primary btn-lg w-100 rounded-pill shadow-lg py-3 fw-bold">Confirm Booking</button>
+                                </div>
+                            </div>
+
+                            <!-- Sidebar / Cart Summary -->
+                            <div class="col-lg-4">
+                                <div class="sticky-top" style="top: 100px; z-index: 10;">
+                                    <div class="bg-white p-4 rounded-4 shadow-sm border">
+                                        <div class="d-flex align-items-center gap-2 mb-4">
+                                            <div class="bg-light rounded-circle p-2">
+                                                <i class="fa fa-shopping-basket text-primary"/>
+                                            </div>
+                                            <h5 class="fw-bold mb-0">Booking Summary</h5>
+                                        </div>
+
+                                        <div id="sidebar_items" class="mb-4">
+                                            <div class="text-center py-4 text-muted small">No services selected yet.</div>
+                                        </div>
+
+                                        <hr class="my-4"/>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Subtotal</span>
+                                            <span id="side_subtotal" class="fw-bold">JOD 0.0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <span class="fs-5 fw-bold text-dark">Total</span>
+                                            <span id="side_total" class="fs-5 fw-bold text-primary">JOD 0.0</span>
+                                        </div>
+
+                                        <button id="sidebar_continue" class="btn btn-light w-100 py-3 rounded-pill fw-bold transition opacity-50" disabled="disabled">
+                                            Book Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="booking_success_page" name="Booking Success">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container py-5 text-center min-vh-100 d-flex align-items-center">
+                    <div class="w-100">
+                        <div class="mb-4">
+                            <i class="fa fa-check-circle text-success" style="font-size: 100px;"/>
+                        </div>
+                        <h1 class="fw-bold mb-2">Booking Confirmed!</h1>
+                        <p class="text-muted mb-5">Your appointment has been successfully scheduled.</p>
+                        <div class="bg-light p-4 rounded-4 d-inline-block border mb-5">
+                            <span class="text-muted small text-uppercase fw-bold">Order Reference:</span>
+                            <h2 class="text-primary fw-bold mb-0" t-esc="order_name"/>
+                        </div>
+                        <p class="mb-5">We've sent the confirmation details to your contact information.</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="/" class="btn btn-outline-dark btn-lg rounded-pill px-5">Home</a>
+                            <a href="/planning/booking" class="btn btn-primary btn-lg rounded-pill px-5 shadow">Book Another</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

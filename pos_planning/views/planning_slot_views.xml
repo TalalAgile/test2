@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Inherit Form View -->
+    <record id="planning_slot_view_form_inherit" model="ir.ui.view">
+        <field name="name">planning.slot.form.inherit</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_form" />
+        <field name="arch" type="xml">
+            <!-- Add fundamental settings under Role -->
+            <xpath expr="//field[@name='role_id']" position="after">
+                <field name="pos_config_id" options="{'no_create': True}" />
+                <!-- Hidden helper fields as requested -->
+                <field name="service_id" invisible="1" />
+                <field name="sale_line_id" invisible="1" />
+            </xpath>
+
+
+
+            <!-- Add Save & Add Another button to header -->
+            <!-- Use 'before' state to ensure it appears in the button bar, not hidden -->
+            <xpath expr="//field[@name='state']" position="before">
+                <button
+                    string="Save &amp; Add Another"
+                    type="object"
+                    name="action_save_and_add_another"
+                    class="btn btn-primary"
+                    data-hotkey="x"
+                />
+            </xpath>
+
+            <!-- Backup Button 1: Inside Header (Generic) -->
+            <xpath expr="//header" position="inside">
+                 <button string="Save &amp; Add Another (Head)" type="object" name="action_save_and_add_another" class="btn btn-secondary"/>
+            </xpath>
+
+            <!-- Backup Button 2: Inside Button Box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                 <button string="Save &amp; Add Another" type="object" name="action_save_and_add_another" class="oe_stat_button" icon="fa-plus"/>
+            </xpath>
+
+            <!-- Backup Button 3: Top of Sheet -->
+            <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <div class="mb-3">
+                    <button string="Save &amp; Add Another (Sheet)" type="object" name="action_save_and_add_another" class="btn btn-primary"/>
+                </div>
+            </xpath>
+
+
+
+            <!-- Add a clean section for Customer and Booking details -->
+
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Booking and Customer Information"
+                    name="pos_booking_info"
+                >
+                    <group>
+                        <field
+                            name="partner_id"
+                            placeholder="Select Customer..."
+                            readonly="0"
+                            options="{'no_quick_create': True}"
+                        />
+                    </group>
+                    <group>
+                        <field
+                            name="booking_status"
+                            widget="badge"
+                            decoration-info="booking_status == 'ongoing'"
+                            decoration-success="booking_status == 'finished'"
+                            decoration-muted="booking_status == 'not_started'"
+                        />
+                        <field
+                            name="sale_order_id"
+                            invisible="not sale_order_id"
+                        />
+                    </group>
+                    <group colspan="2">
+                        <field
+                            name="booking_line_ids"
+                            widget="many2many_tags"
+                        />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit List View for Selection and extra fields -->
+    <record id="planning_slot_view_tree_inherit" model="ir.ui.view">
+        <field name="name">planning.slot.list.inherit</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-warning">sale_order_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='role_id']" position="after">
+                <field name="partner_id" optional="show" />
+                <field
+                    name="booking_status"
+                    optional="show"
+                    widget="badge"
+                    decoration-info="booking_status == 'ongoing'"
+                    decoration-success="booking_status == 'finished'"
+                    decoration-muted="booking_status == 'not_started'"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Gantt View to set default grouping -->
+    <record id="planning_slot_view_gantt_inherit" model="ir.ui.view">
+        <field name="name">planning.slot.gantt.inherit</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_gantt" />
+        <field name="arch" type="xml">
+            <xpath expr="//gantt" position="attributes">
+                <attribute
+                    name="default_group_by"
+                >role_id,resource_id</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Menu Item in Planning Backend -->
+    <menuitem
+        id="menu_planning_available_slots"
+        name="Location Schedule"
+        parent="planning.planning_menu_schedule"
+        action="planning.planning_action_schedule_by_resource"
+        sequence="20"
+    />
+</odoo>

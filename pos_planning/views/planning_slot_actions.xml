@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action to open Planning Slots -->
+    <record id="action_planning_slot_gantt" model="ir.actions.act_window">
+        <field name="name">Planning Slots</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">gantt,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new planning slot
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu item to access Planning Slots -->
+    <menuitem
+        id="menu_planning_slot_root"
+        name="POS Planning"
+        sequence="10"
+        web_icon="stock,static/description/icon.png"
+    />
+
+    <menuitem
+        id="menu_planning_slot_gantt"
+        name="Planning Slots"
+        parent="menu_planning_slot_root"
+        action="action_planning_slot_gantt"
+        sequence="10"
+    />
+
+</odoo>

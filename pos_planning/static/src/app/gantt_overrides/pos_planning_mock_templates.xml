@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Mock mail.Avatar for POS environment -->
+    <t t-name="mail.Avatar">
+        <div class="o-mail-Avatar o_avatar d-flex align-items-center" t-att-class="props.cssClass">
+            <img t-attf-class="rounded {{props.noSpacing ? '' : 'me-2'}}"
+                t-attf-src="/web/image/{{props.resModel}}/{{props.resId}}/avatar_128"
+                t-on-click.stop.prevent="onClickAvatar"
+            />
+            <span t-if="props.displayName" class="text-truncate w-0 flex-grow-1" t-esc="props.displayName"/>
+        </div>
+    </t>
+
+    <!-- Mock resource_mail templates -->
+    <t t-name="resource_mail.AvatarCardResourcePopover">
+        <div class="o_avatar_card_details p-3">
+            <t t-slot="default"/>
+        </div>
+    </t>
+
+    <t t-name="resource_mail.Many2OneAvatarResourceField">
+        <div class="o_field_many2one_avatar_resource">
+            <span class="o_avatar o_material_resource"/>
+        </div>
+    </t>
+
+    <t t-name="resource_mail.KanbanMany2OneAvatarResourceField">
+        <div class="o_field_many2one_avatar_resource">
+            <span class="o_avatar o_material_resource"/>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="approval_request_view_form_inherit_advance" model="ir.ui.view">
+        <field name="name">approval.request.view.form.inherit.advance</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button
+                    name="action_create_payment"
+                    type="object"
+                    string="Create Payment"
+                    class="oe_highlight"
+                    invisible="not is_employee_advance or request_status != 'approved' or payment_id"
+                    groups="account.group_account_invoice"
+                />
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_open_payment"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-money"
+                    invisible="not is_employee_advance or not payment_id"
+                >
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Payment</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field
+                    name="employee_id"
+                    invisible="not is_employee_advance"
+                    required="is_employee_advance"
+                />
+                <field name="is_employee_advance" invisible="1" />
+                <field name="payment_id" invisible="1" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

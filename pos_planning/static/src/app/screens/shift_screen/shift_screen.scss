@@ -1,0 +1,23 @@
+.shift-screen {
+    .gantt-wrapper { user-select: none; background-color: #fff; }
+    .resource-col { flex-shrink: 0; background-color: #fff; z-index: 20; }
+    .hour-slot { flex-shrink: 0; background-color: #fff; color: #444; font-weight: 500; }
+    .gantt-row { background-color: #fff; &:hover { .resource-col { background-color: #f8f9fa; } .timeline-col { background-color: #fcfcfc; } } }
+    .gantt-grid { background-color: transparent; cursor: crosshair; min-height: 75px; }
+    
+    .gantt-drag-shadow { 
+        background-color: rgba(113, 75, 103, 0.1); 
+        border: 2px dashed #714B67; 
+        top: 8px; bottom: 8px; 
+        pointer-events: none; 
+        z-index: 50; 
+        border-radius: 8px; 
+        display: block !important; 
+    }
+
+    .gantt-pill { 
+        top: 12px; bottom: 12px; 
+        z-index: 40; 
+        transition: transform 0.1s, box-shadow 0.1s;
+    }
+}

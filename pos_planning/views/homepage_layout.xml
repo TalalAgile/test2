@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- Homepage Layout -->
+        <template
+            id="tariq_musharbash_homepage"
+            inherit_id="website.homepage"
+            name="Tariq Musharbash Beauty Saloon Home"
+        >
+            <xpath expr="//div[@id='wrap']" position="replace">
+                <div id="wrap" class="oe_structure oe_empty">
+
+                    <!-- Custom Style for this page -->
+                    <style>
+                        :root {
+                            --tm-primary: #714B67; /* Signature Purple */
+                            --tm-secondary: #F8F9FA;
+                            --tm-text: #333333;
+                        }
+                        .text-purple { color: var(--tm-primary) !important; }
+                        .bg-purple { background-color: var(--tm-primary) !important; }
+                        .btn-purple {
+                            background-color: var(--tm-primary);
+                            color: white;
+                            border: 2px solid var(--tm-primary);
+                            transition: all 0.3s;
+                        }
+                        .btn-purple:hover {
+                            background-color: white;
+                            color: var(--tm-primary);
+                        }
+                        .service-card-home {
+                            transition: transform 0.3s;
+                            border: 1px solid #eee;
+                        }
+                        .service-card-home:hover {
+                            transform: translateY(-10px);
+                            box-shadow: 0 10px 20px rgba(113, 75, 103, 0.1);
+                        }
+                    </style>
+
+                    <!-- Hero Section -->
+                    <section
+                        class="s_cover parallax s_parallax_is_fixed bg-black-50 pt96 pb96"
+                        data-scroll-background-ratio="1"
+                        style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80'); background-position: 50% 50%;"
+                    >
+                        <span
+                            class="s_parallax_bg oe_img_bg"
+                            style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80'); background-position: 50% 50%;"
+                        />
+                        <div class="o_we_bg_filter bg-black-50" />
+                        <div class="container s_cover_content">
+                            <div class="row align-items-center">
+                                <div class="col-lg-12 text-center">
+                                    <h1
+                                        class="display-3 fw-bold text-white mb-4"
+                                        style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"
+                                    >
+                                        Tariq Musharbash <br /> <span
+                                            class="fw-light"
+                                        >Beauty Saloon</span>
+                                    </h1>
+                                    <p
+                                        class="lead text-white mb-5"
+                                        style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"
+                                    >
+                                        Experience luxury, elegance, and perfection in the heart of Amman.
+                                    </p>
+                                    <div
+                                        class="d-flex gap-3 justify-content-center"
+                                    >
+                                        <a
+                                            href="/planning/booking"
+                                            class="btn btn-purple btn-lg px-5 py-3 rounded-pill fw-bold shadow"
+                                        >
+                                            Book Appointment
+                                        </a>
+                                        <a
+                                            href="#services"
+                                            class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold"
+                                        >
+                                            Our Services
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- About Section -->
+                    <section class="s_text_image pt80 pb80 bg-white">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+                                        class="img img-fluid rounded-3 shadow-lg"
+                                        alt="Salon Interior"
+                                    />
+                                </div>
+                                <div class="col-lg-6 ps-lg-5">
+                                    <h5
+                                        class="text-purple text-uppercase fw-bold mb-3"
+                                    >About Us</h5>
+                                    <h2
+                                        class="display-6 fw-bold mb-4"
+                                    >Redefining Beauty in Amman</h2>
+                                    <p class="lead text-muted mb-4">
+                                        At Tariq Musharbash Beauty Saloon, we believe that beauty is an art form. Located in the prestigious district of Abdoun, we offer a sanctuary where style meets sophistication.
+                                    </p>
+                                    <p class="text-muted mb-4">
+                                        Our team of expert stylists and beauty professionals are dedicated to bringing out your best look, using only premium products and the latest techniques.
+                                    </p>
+                                    <div class="row g-4 mb-4">
+                                        <div class="col-6">
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fa fa-check-circle text-purple me-2"
+                                                /> <span>Expert Stylists</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fa fa-check-circle text-purple me-2"
+                                                /> <span>Premium Products</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fa fa-check-circle text-purple me-2"
+                                                /> <span>Private Suites</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <i
+                                                    class="fa fa-check-circle text-purple me-2"
+                                                /> <span>Bridal Packages</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Services Section -->
+                    <section
+                        id="services"
+                        class="s_features pt96 pb96"
+                        style="background-color: #fcfcfc;"
+                    >
+                        <div class="container">
+                            <div class="text-center mb-5">
+                                <h5
+                                    class="text-purple text-uppercase fw-bold"
+                                >What We Do</h5>
+                                <h2
+                                    class="display-5 fw-bold"
+                                >Exclusive Services</h2>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-lg-4 col-md-6">
+                                    <div
+                                        class="service-card-home bg-white p-5 rounded-3 text-center h-100"
+                                    >
+                                        <div class="icon-box mb-4">
+                                            <i
+                                                class="fa fa-scissors fa-3x text-purple"
+                                            />
+                                        </div>
+                                        <h4 class="mb-3">Hair Styling</h4>
+                                        <p
+                                            class="text-muted mb-4"
+                                        >From precision cuts to vibrant coloring and restorative treatments, our hair experts create looks that turn heads.</p>
+                                        <a
+                                            href="/planning/booking"
+                                            class="text-purple fw-bold text-decoration-none"
+                                        >Book Hair <i
+                                                class="fa fa-arrow-right ms-1"
+                                            /></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div
+                                        class="service-card-home bg-white p-5 rounded-3 text-center h-100"
+                                    >
+                                        <div class="icon-box mb-4">
+                                            <i
+                                                class="fa fa-magic fa-3x text-purple"
+                                            />
+                                        </div>
+                                        <h4 class="mb-3">Makeup Artistry</h4>
+                                        <p
+                                            class="text-muted mb-4"
+                                        >Professional makeup for weddings, events, or photoshoots. Enhancing your natural beauty with a touch of glam.</p>
+                                        <a
+                                            href="/planning/booking"
+                                            class="text-purple fw-bold text-decoration-none"
+                                        >Book Makeup <i
+                                                class="fa fa-arrow-right ms-1"
+                                            /></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div
+                                        class="service-card-home bg-white p-5 rounded-3 text-center h-100"
+                                    >
+                                        <div class="icon-box mb-4">
+                                            <i
+                                                class="fa fa-spa fa-3x text-purple"
+                                            />
+                                        </div>
+                                        <h4 class="mb-3">Spa &amp; Care</h4>
+                                        <p
+                                            class="text-muted mb-4"
+                                        >Rejuvenating facials, manicures, and pedicures designed to relax your mind and refresh your body.</p>
+                                        <a
+                                            href="/planning/booking"
+                                            class="text-purple fw-bold text-decoration-none"
+                                        >Book Spa <i
+                                                class="fa fa-arrow-right ms-1"
+                                            /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CTA Section -->
+                    <section
+                        class="s_call_to_action pt80 pb80 bg-purple text-white text-center"
+                    >
+                        <div class="container">
+                            <h2
+                                class="display-5 fw-bold mb-4"
+                            >Ready for a Transformation?</h2>
+                            <p
+                                class="lead mb-5 opacity-75"
+                            >Book your appointment online today and skip the waiting line.</p>
+                            <a
+                                href="/planning/booking"
+                                class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-purple shadow-lg"
+                            >
+                                Book Now
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- Contact/Map Section -->
+                    <section class="s_contact_info pt80 pb80 bg-white">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="fw-bold mb-4">Visit Us</h3>
+                                    <p class="lead mb-4">
+                                        We are conveniently located in Amman. Drop by for a consultation or a quick refresh.
+                                    </p>
+                                    <div class="d-flex mb-3">
+                                        <i
+                                            class="fa fa-map-marker text-purple fs-4 me-3 mt-1"
+                                        />
+                                        <div>
+                                            <h5 class="fw-bold">Address</h5>
+                                            <p
+                                                class="text-muted"
+                                            >Abdoun Circle, Amman, Jordan</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <i
+                                            class="fa fa-phone text-purple fs-4 me-3 mt-1"
+                                        />
+                                        <div>
+                                            <h5 class="fw-bold">Phone</h5>
+                                            <p
+                                                class="text-muted"
+                                            >+962 6 592 XXXX</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <i
+                                            class="fa fa-clock-o text-purple fs-4 me-3 mt-1"
+                                        />
+                                        <div>
+                                            <h5 class="fw-bold">Hours</h5>
+                                            <p class="text-muted">
+                                                Mon - Sat: 10:00 AM - 8:00 PM<br
+                                                />
+                                                Sunday: Closed
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <!-- Placeholder Map Image -->
+                                    <div
+                                        class="bg-light rounded-3 h-100 d-flex align-items-center justify-content-center text-muted"
+                                        style="min-height: 400px; border: 1px dashed #ccc;"
+                                    >
+                                        <div class="text-center">
+                                            <i class="fa fa-map-o fa-3x mb-3" />
+                                            <p>Google Maps Integration</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

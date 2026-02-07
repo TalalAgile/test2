@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_planning.PlanningBackendPopup">
+        <Dialog title="title" size="'fs'">
+            <div class="h-100 w-100 overflow-hidden" style="min-height: 80vh;">
+                <iframe t-att-src="url" class="w-100 h-100 border-0" />
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="props.close">Close</button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

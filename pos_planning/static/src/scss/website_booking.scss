@@ -1,0 +1,299 @@
+// Variables
+$brand-color: #714B67;
+$text-primary: #101928;
+$text-secondary: #576071;
+$border-color: #e5e7eb;
+$bg-light: #f9fafb;
+$hover-bg: #f3f4f6;
+
+body {
+    background-color: $bg-light;
+}
+
+// General Utilities
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+
+// Steps Indicator
+.booking-steps {
+    .step-item {
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        position: relative;
+        padding-bottom: 4px;
+
+        &.active {
+            color: $text-primary;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: $text-primary;
+            }
+        }
+
+        &:not(.active) {
+            color: $text-secondary;
+            &:hover {
+                color: $text-primary;
+            }
+        }
+    }
+}
+
+// Location Card
+.location-card {
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: #fff;
+    height: 100%;
+
+    &:hover {
+        border-color: $brand-color;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+}
+
+// Service Card
+.service-card {
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: #fff;
+    margin-bottom: 1rem;
+
+    &:hover {
+        background-color: $bg-light;
+        border-color: darken($border-color, 10%);
+    }
+
+    &.border-primary {
+        border-color: $brand-color !important;
+        background-color: lighten($brand-color, 58%);
+
+        .fa-check-circle {
+            color: $brand-color !important;
+        }
+    }
+}
+
+// Professional Card
+.professional-card {
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: #fff;
+    padding: 1.25rem;
+
+    &:hover {
+        border-color: $text-primary;
+        background-color: $bg-light;
+    }
+
+    &.border-primary {
+        border-color: $brand-color !important;
+        background-color: lighten($brand-color, 58%);
+    }
+}
+
+// Date Picker (Horizontal Scroll)
+.date-picker-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.date-item {
+    border: 1px solid $border-color;
+    border-radius: 12px !important;
+    width: 85px;
+    min-width: 85px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fff;
+
+    &:hover {
+        border-color: $text-primary;
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        background-color: $text-primary;
+        color: #fff !important;
+        border-color: $text-primary;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+        .text-uppercase {
+            opacity: 0.9 !important;
+        }
+    }
+}
+
+// Time Slots
+.time-slot {
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fff;
+
+    &:hover {
+        border-color: $text-primary;
+        background-color: $bg-light;
+    }
+
+    &.bg-primary {
+        background-color: $text-primary !important;
+        border-color: $text-primary !important;
+        color: #fff !important;
+
+        .text-muted {
+            color: rgba(255,255,255, 0.8) !important;
+        }
+
+        .text-primary {
+            color: #fff !important;
+        }
+    }
+}
+
+// Per Service Selection
+#per_service_selection_container {
+    animation: slideInRight 0.3s ease-out;
+
+    .card {
+        border: 1px solid $border-color;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .per-service-resource-select {
+        background-color: $bg-light;
+        &:focus {
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba($brand-color, 0.2);
+        }
+    }
+}
+
+// Sidebar/Summary
+#booking_sidebar {
+    .bg-white {
+        border: 1px solid $border-color;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .sticky-top {
+        top: 2rem;
+        z-index: 100;
+    }
+}
+
+// Animations
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.booking-step {
+    animation: fadeInScale 0.3s ease-out;
+}
+
+// Button overrides
+.btn-dark, .btn-primary {
+    background-color: $text-primary;
+    border-color: $text-primary;
+    color: #fff;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+
+    &:hover {
+        background-color: lighten($text-primary, 10%);
+        border-color: lighten($text-primary, 10%);
+    }
+
+    &:disabled {
+        background-color: lighten($text-primary, 40%);
+        border-color: lighten($text-primary, 40%);
+    }
+}
+
+.btn-light {
+    background-color: #fff;
+    border-color: $border-color;
+
+    &:hover {
+        background-color: $bg-light;
+        border-color: darken($border-color, 10%);
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .booking-steps {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+        justify-content: flex-start !important;
+
+        .step-item {
+            margin-right: 1.5rem;
+        }
+    }
+
+    h1.display-4 {
+        font-size: 1.75rem;
+    }
+
+    .location-card, .service-card, .professional-card, .time-slot {
+        padding: 1rem;
+    }
+
+    #booking_sidebar {
+        display: none !important;
+    }
+
+    // Bottom bar summary for mobile could be added here if structure allowed
+}

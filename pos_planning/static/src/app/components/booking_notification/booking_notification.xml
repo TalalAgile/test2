@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_planning.BookingNotification">
+        <div
+            class="booking-notification position-relative d-flex align-items-center justify-content-center p-2 cursor-pointer"
+            t-on-click="resetCount"
+            style="cursor: pointer;"
+        >
+            <i class="fa fa-envelope text-dark fs-4" title="New Bookings" />
+            <span
+                t-if="state.count > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="font-size: 0.7rem; min-width: 1.2rem;"
+            >
+                <t t-esc="state.count" />
+            </span>
+        </div>
+    </t>
+</templates>

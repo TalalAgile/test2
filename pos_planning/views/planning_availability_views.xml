@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="planning_action_available_slots" model="ir.actions.act_window">
+        <field name="name">Available Slots</field>
+        <field name="res_model">planning.slot</field>
+        <field name="view_mode">gantt,calendar,list,form</field>
+        <field name="domain">[('is_available_slot', '=', True)]</field>
+        <field name="context">{'default_is_available_slot': True, 'search_default_group_by_resource': 1, 'planning_gantt_no_sample': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create available time windows for website bookings.
+            </p>
+            <p>
+                These slots will appear as white "Available" blocks on the POS and Website.
+                When a customer books, these slots will be split or consumed.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="planning_menu_available_slots"
+        name="Availability"
+        parent="planning.planning_menu_root"
+        action="planning_action_available_slots"
+        sequence="20"/>
+</odoo>

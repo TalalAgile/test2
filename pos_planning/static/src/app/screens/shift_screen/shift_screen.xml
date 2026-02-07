@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_planning.ShiftScreen">
+        <div
+            class="planning-screen screen h-100 d-flex flex-column bg-100"
+            t-on-mousedown="() => state.showScaleDropdown = false"
+        >
+            <div
+                class="top-content d-flex align-items-center p-2 border-bottom bg-view shadow-sm sticky-top"
+            >
+                <button
+                    class="button back btn btn-lg btn-outline-secondary me-3 shadow-none"
+                    t-on-click="() => this.back()"
+                >
+                    <i class="fa fa-angle-double-left me-1" /> Back to Planning
+                </button>
+                <div class="navigation-group d-flex align-items-center gap-1">
+                    <button
+                        class="btn btn-light border shadow-none"
+                        t-on-click.stop="() => this.changeDate(-1)"
+                    ><i class="fa fa-chevron-left" /></button>
+                    <button
+                        class="btn btn-light border shadow-none"
+                        t-on-click.stop="() => this.changeDate(1)"
+                    ><i class="fa fa-chevron-right" /></button>
+                    <div class="dropdown ms-2 position-relative">
+                        <button
+                            class="btn btn-light border dropdown-toggle text-capitalize shadow-none"
+                            type="button"
+                            t-on-click.stop="() => this.toggleScaleDropdown()"
+                        >
+                            <t t-esc="state.scale" />
+                        </button>
+                        <div
+                            class="dropdown-menu shadow-lg show p-1 border-0"
+                            t-if="state.showScaleDropdown"
+                            t-on-mousedown.stop=""
+                            style="display: block; position: absolute; top: 100%; left: 0; min-width: 120px; z-index: 1000;"
+                        >
+                            <button
+                                class="dropdown-item rounded py-2"
+                                t-on-click.stop="() => this.setScale('day')"
+                            >Day</button>
+                            <button
+                                class="dropdown-item rounded py-2"
+                                t-on-click.stop.stop="() => this.setScale('week')"
+                            >Week</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-grow-1 text-center">
+                    <h4 class="mb-0 fw-bold">Manage Shifts (Availability)</h4>
+                    <small
+                        class="text-muted"
+                    >Drag to add shifts. Click to edit/remove.</small>
+                </div>
+                <div class="top-right d-flex gap-2 ms-auto align-items-center">
+                    <span class="fw-bold text-dark small"><t
+                            t-esc="state.startDate"
+                        /> - <t t-esc="state.endDate" /></span>
+                </div>
+            </div>
+
+            <div class="content flex-grow-1 overflow-auto bg-white">
+                <div
+                    class="gantt-wrapper"
+                    t-attf-style="min-width: {{state.scale === 'day' ? 2800 : 1400}}px;"
+                >
+                    <div
+                        class="gantt-header d-flex bg-white sticky-top border-bottom shadow-sm"
+                        style="top: 0; z-index: 105;"
+                    >
+                        <div
+                            class="resource-col text-center d-flex align-items-center justify-content-center fw-bold border-end"
+                            style="width: 200px; height: 50px;"
+                        >Resources</div>
+                        <div class="timeline-col flex-grow-1 d-flex">
+                            <t
+                                t-foreach="state.timelineLabels"
+                                t-as="label"
+                                t-key="label_index"
+                            >
+                                <div
+                                    class="hour-slot border-end d-flex align-items-center justify-content-center small fw-bold"
+                                    t-attf-style="width: {{100 / state.timelineLabels.length}}%; font-size: 11px; border-color: rgba(0,0,0,0.1) !important;"
+                                >
+                                    <t t-if="label" t-esc="label" />
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <t t-foreach="state.resources" t-as="res" t-key="res.id">
+                        <t t-if="state.groupedData[res.id]">
+                            <div class="gantt-row d-flex border-bottom">
+                                <div
+                                    class="resource-col border-end p-2 d-flex align-items-center bg-white text-truncate shadow-sm-inset"
+                                    style="width: 200px; min-height: 75px;"
+                                >
+                                    <span
+                                        class="ps-2 fw-medium text-dark"
+                                        t-esc="res.name"
+                                    />
+                                </div>
+                                <div
+                                    class="timeline-col flex-grow-1 position-relative gantt-grid bg-light"
+                                    t-on-mousedown="(ev) => this.onMouseDown(ev, res.id)"
+                                    t-on-mousemove="(ev) => this.onMouseMove(ev)"
+                                    t-on-mouseup="() => this.onMouseUp()"
+                                >
+
+                                    <div
+                                        class="grid-lines position-absolute w-100 h-100 d-flex pointer-events-none"
+                                    >
+                                        <t
+                                            t-foreach="state.timelineLabels"
+                                            t-as="l"
+                                            t-key="l_index"
+                                        >
+                                            <div
+                                                class="grid-line border-end h-100"
+                                                t-attf-style="width: {{100 / state.timelineLabels.length}}%; border-color: rgba(0,0,0,0.1) !important;"
+                                            />
+                                        </t>
+                                    </div>
+
+                                    <t
+                                        t-foreach="state.groupedData[res.id].work_intervals"
+                                        t-as="interval"
+                                        t-key="interval.id"
+                                    >
+                                        <div
+                                            t-att-style="interval.style"
+                                            class="work-interval"
+                                        />
+                                    </t>
+
+                                    <div
+                                        t-if="state.isDragging and state.dragResourceId == res.id"
+                                        class="gantt-drag-shadow position-absolute bg-primary opacity-50"
+                                        t-att-style="`left: ${Math.min(state.dragStart, state.dragEnd)*100}%; width: ${Math.max(0.001, Math.abs(state.dragEnd-state.dragStart))*100}%; height: 100%; pointer-events: none; border-radius: 6px;`"
+                                    />
+
+                                    <t
+                                        t-foreach="state.groupedData[res.id].slots"
+                                        t-as="slot"
+                                        t-key="slot.id"
+                                    >
+                                        <div
+                                            t-att-style="slot.style"
+                                            class="d-flex align-items-center justify-content-center shadow-sm hover-shadow transition"
+                                            t-on-click.stop="() => this.onClickSlot(slot)"
+                                        >
+                                            <small
+                                                class="fw-bold text-dark opacity-75"
+                                            >SHIFT</small>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

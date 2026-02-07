@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_advance" name="Portal layout : advance menu entries" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'advance' or advance or new_advance_create" class="breadcrumb-item active">
+                <a t-if="advance or new_advance_create" href="/my/advances">Advances</a>
+                <t t-else="">Advances</t>
+            </li>
+            <li t-if="advance" class="breadcrumb-item active">
+                <t t-esc="advance.name"/>
+            </li>
+            <li t-if="new_advance_create" class="breadcrumb-item active">
+                New
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_advance" name="Portal My Home : advance entries" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'"/>
+                <t t-set="title">Advances</t>
+                <t t-set="text">Request and track your cash advances</t>
+                <t t-set="url" t-value="'/my/advances'"/>
+                <t t-set="placeholder_count" t-value="'advance_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_advances" name="My Advance Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Advances</t>
+            </t>
+            <div class="mb-3">
+                <a href="/my/advances/new" class="btn btn-primary">New Advance Request</a>
+            </div>
+            <t t-if="not advances">
+                <p class="alert alert-warning">There are currently no advance requests for your account.</p>
+            </t>
+            <t t-if="advances" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Request</th>
+                        <th class="text-end">Amount</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="advances" t-as="advance">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/advances/#{advance.id}"><t t-esc="advance.name"/></a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="advance.amount" t-options='{"widget": "monetary", "display_currency": advance.currency_id}'/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="advance.request_status" t-attf-class="badge rounded-pill #{'text-bg-info' if advance.request_status == 'pending' else 'text-bg-success' if advance.request_status == 'approved' else 'text-bg-danger' if advance.request_status == 'refused' else 'text-bg-secondary'}"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_advance_page" name="My Advance Request">
+        <t t-call="portal.portal_layout">
+            <t t-set="o_portal_fullwidth_alert" t-if="advance.request_status == 'refused'">
+                <div class="alert alert-danger" role="alert">
+                    This request has been refused.
+                </div>
+            </t>
+
+            <div class="card mt-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0" t-field="advance.name"/>
+                    <span t-field="advance.request_status" t-attf-class="badge rounded-pill #{'text-bg-info' if advance.request_status == 'pending' else 'text-bg-success' if advance.request_status == 'approved' else 'text-bg-danger' if advance.request_status == 'refused' else 'text-bg-secondary'}"/>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Amount:</strong> <span t-field="advance.amount" t-options='{"widget": "monetary", "display_currency": advance.currency_id}'/>
+                        </div>
+                        <div class="col-6">
+                            <strong>Date:</strong> <span t-field="advance.create_date" t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                    <div class="row mt-3" t-if="advance.reason">
+                        <div class="col-12">
+                            <strong>Reason:</strong>
+                            <div class="mt-2" t-field="advance.reason"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_create_advance" name="Create Advance Request">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'advance'"/>
+            <t t-set="new_advance_create" t-value="True"/>
+            <div class="container mt-3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="mb-0 text-white">New Advance Request</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="/my/advances/new" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="form-group mb-3">
+                                        <label for="amount" class="form-label fw-bold">Amount</label>
+                                        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required="required" placeholder="0.00"/>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="reason" class="form-label fw-bold">Reason</label>
+                                        <textarea name="reason" id="reason" class="form-control" rows="4" placeholder="Describe the purpose of this advance..."></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end gap-2 mt-4">
+                                        <a href="/my/advances" class="btn btn-outline-secondary">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

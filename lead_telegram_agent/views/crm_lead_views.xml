@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_view_form_inherit_telegram" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.telegram</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Telegram AI Agent" name="telegram_ai">
+                    <group>
+                        <group>
+                            <field name="telegram_chat_id"/>
+                            <field name="is_ai_agent_enabled"/>
+                        </group>
+                    </group>
+                    <group string="AI Context / Instructions">
+                        <field name="ai_agent_context" placeholder="Ask the lead about their budget..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Product Template Form -->
+    <record id="product_template_form_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.pos.planning</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-block">
+                    <field name="booking_duration"/>
+                    <label for="booking_duration"/>
+                </span>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Kanban Catalog Inherit - Safely inject category image -->
+    <record id="product_product_view_kanban_catalog_inherit" model="ir.ui.view">
+        <field name="name">product.product.kanban.catalog.inherit.pos.planning</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_view_kanban_catalog"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <div class="o_kanban_image_container position-relative mb-2 d-block w-100">
+                    <img t-if="record.categ_id.raw_value"
+                         t-attf-src="/web/image/product.category/{{record.categ_id.raw_value}}/image_128"
+                         class="o_kanban_image w-100 rounded shadow-sm"
+                         style="height: 80px; object-fit: cover; opacity: 0.9; width: 100%; display: block;"/>
+                    <div class="position-absolute bottom-0 start-0 w-100 p-1 bg-dark bg-opacity-50 text-white small px-2 fw-bold text-truncate"
+                         style="backdrop-filter: blur(2px);">
+                        <i class="fa fa-folder-open-o me-1"/> <field name="categ_id"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

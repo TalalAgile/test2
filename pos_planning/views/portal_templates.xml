@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- 1. Inherit Portal Home to add the Bookings entry -->
+    <template
+        id="portal_my_home_bookings"
+        name="Show Bookings"
+        inherit_id="portal.portal_my_home"
+        priority="30"
+    >
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Bookings</t>
+                <t t-set="text">View and manage your scheduled appointments</t>
+                <t t-set="url" t-value="'/my/appointments'" />
+                <t t-set="placeholder_count" t-value="'planning_count'" />
+                <t
+                    t-set="icon"
+                    t-value="'/planning/static/description/icon.png'"
+                />
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 2. Define the Bookings list view -->
+    <template id="portal_my_appointments" name="My Bookings">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Bookings</t>
+            </t>
+            <t t-if="not slots">
+                <p
+                    class="text-muted"
+                >There are currently no scheduled bookings for your account.</p>
+            </t>
+            <t t-if="slots" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Reference</th>
+                        <th>Date</th>
+                        <th>Professional</th>
+                        <th>Service</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="slots" t-as="slot">
+                    <tr>
+                        <td>
+                            <span t-field="slot.name" />
+                        </td>
+                        <td>
+                            <span
+                                t-field="slot.start_datetime"
+                                t-options='{"widget": "datetime"}'
+                            />
+                        </td>
+                        <td>
+                            <span t-field="slot.resource_id.name" />
+                        </td>
+                        <td>
+                            <span t-field="slot.service_id.name" />
+                        </td>
+                        <td class="text-end">
+                            <span
+                                t-if="slot.booking_status == 'not_started'"
+                                class="badge rounded-pill text-bg-secondary"
+                            >Scheduled</span>
+                            <span
+                                t-if="slot.booking_status == 'ongoing'"
+                                class="badge rounded-pill text-bg-info"
+                            >Ongoing</span>
+                            <span
+                                t-if="slot.booking_status == 'finished'"
+                                class="badge rounded-pill text-bg-success"
+                            >Finished</span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- 3. Update Breadcrumbs -->
+    <template
+        id="portal_my_home_menu_appointment"
+        name="Portal layout : booking menu entries"
+        inherit_id="portal.portal_breadcrumbs"
+        priority="30"
+    >
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li
+                t-if="page_name == 'appointment'"
+                class="breadcrumb-item active"
+            >
+                Bookings
+            </li>
+        </xpath>
+    </template>
+</odoo>

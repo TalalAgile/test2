@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_telegram" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.telegram</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="crm.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='crm']" position="inside">
+                <block title="Telegram AI Agent" name="telegram_agent_setting">
+                    <setting string="Bot Credentials">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="telegram_bot_token" class="col-lg-3 o_light_label"/>
+                                <field name="telegram_bot_token" password="True"/>
+                            </div>
+                            <div class="row">
+                                <label string="OpenAI API Key" for="openai_api_key" class="col-lg-3 o_light_label"/>
+                                <field name="openai_api_key" password="True"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting string="AI Behavior">
+                        <div class="row">
+                            <label for="ai_employee_role" class="col-lg-3 o_light_label"/>
+                            <field name="ai_employee_role"/>
+                            <field name="telegram_api_id"/>
+                            <field name="telegram_api_hash" password="True"/>
+                        </div>
+                        <div class="mt16">
+                            <label for="ai_system_prompt" class="o_light_label"/>
+                            <field name="ai_system_prompt" class="w-100"/>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

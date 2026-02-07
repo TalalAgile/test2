@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('navbar-menu')]" position="inside">
+            <button
+                class="btn btn-light border-0 fw-bold px-3 d-flex align-items-center gap-2"
+                t-att-class="{'active': mainButton === 'planning'}"
+                t-on-click="() => pos.openPlanning()"
+            >
+                <i class="fa fa-calendar-check-o text-primary" />
+                Planning
+            </button>
+            <BookingNotification />
+        </xpath>
+    </t>
+</templates>

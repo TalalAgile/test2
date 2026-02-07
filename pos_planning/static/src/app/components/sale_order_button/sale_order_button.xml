@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+
+    <!-- 1. Define the component's template -->
+    <t t-name="pos_planning.SaleOrderButton">
+        <button t-att-class="props.class" t-on-click="click">
+            <i
+                class="fa fa-shopping-basket me-1"
+                role="img"
+                aria-label="Orders"
+                title="Orders"
+            />
+            Orders
+        </button>
+    </t>
+
+    <!-- 2. Inherit ControlButtons to place the new component -->
+    <t t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//InternalNoteButton" position="after">
+            <SaleOrderButton class="buttonClass" />
+        </xpath>
+    </t>
+
+</templates>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_planning.ShiftsButton">
+        <button class="control-button btn btn-secondary btn-lg lh-lg" t-on-click="clickShifts">
+             <i class="fa fa-clock-o me-1" role="img" aria-label="Shifts" title="Manage Shifts" />
+            Shifts
+        </button>
+    </t>
+
+    <t t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('control-buttons')]" position="inside">
+            <ShiftsButton />
+        </xpath>
+    </t>
+</templates>
