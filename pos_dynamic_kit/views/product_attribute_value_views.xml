@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_attribute_value_view_form_inherit" model="ir.ui.view">
+        <field name="name">product.attribute.value.view.form.inherit</field>
+        <field name="model">product.attribute.value</field>
+        <field name="inherit_id" ref="product.product_attribute_value_view_form"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="Inventory Deduction Rules">
+                    <field name="deduction_ids">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="product_tmpl_ids" widget="many2many_tags"/>
+                            <field name="deduction_line_ids" widget="many2many_tags"/>
+                        </list>
+                        <form>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="product_tmpl_ids" widget="many2many_tags"/>
+                            </group>
+                            <field name="deduction_line_ids">
+                                <list editable="bottom">
+                                    <field name="condition_value_id"/>
+                                    <field name="quantity"/>
+                                </list>
+                            </field>
+                        </form>
+                    </field>
+                </group>
+            </sheet>
+        </field>
+    </record>
+</odoo>
