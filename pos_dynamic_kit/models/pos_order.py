@@ -69,7 +69,7 @@ class StockPicking(models.Model):
                 
                 # Create move values for the ingredient
                 extra_move_vals.append({
-                    'name': f"{line.name} (Ingredient: {ingredient.name})",
+                    'description_picking': f"{line.name} (Ingredient: {ingredient.name})",
                     'product_id': ingredient.id,
                     'product_uom_qty': total_qty,
                     'product_uom': ingredient.uom_id.id,
