@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gl_statement_wizard_form" model="ir.ui.view">
+        <field name="name">gl.statement.wizard.form</field>
+        <field name="model">gl.statement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="GL Statement of Account">
+                <group>
+                    <group>
+                        <field name="account_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="analytic_account_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/> 
+                        <field name="language"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_pdf" string="Print PDF" type="object" class="btn-primary"/>
+                    <button name="action_print_excel" string="Print Excel" type="object" class="btn-primary" icon="fa-file-excel-o"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gl_statement_wizard" model="ir.actions.act_window">
+        <field name="name">GL Statement of Account</field>
+        <field name="res_model">gl.statement.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_gl_statement_report"
+              name="GL Statement of Account"
+              parent="account.menu_finance_reports"
+              action="action_gl_statement_wizard"
+              sequence="25"/>
+</odoo>

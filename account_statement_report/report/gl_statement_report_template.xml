@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="gl_statement_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" t-att-style="'direction: rtl; text-align: right;' if lang == 'ar_001' else 'direction: ltr; text-align: left;'">
+                    <div class="row">
+                        <div class="col-12 text-center mb-4">
+                            <h2 style="color: #2c3e50; font-weight: bold; border-bottom: 2px solid #2c3e50; padding-bottom: 10px;">
+                                <span t-esc="report_name"/>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4" style="font-size: 1.1em;">
+                        <div class="col-6">
+                            <h4 style="color: #34495e;">
+                                <strong><span t-esc="account.name"/> (<span t-esc="account.code"/>)</strong>
+                            </h4>
+                        </div>
+                        <div class="col-6 text-right" t-att-style="'text-align: left;' if lang == 'ar_001' else 'text-align: right;'">
+                            <strong><span t-esc="labels['from']"/></strong> <span t-esc="date_from"/><br/>
+                            <strong><span t-esc="labels['to']"/></strong> <span t-esc="date_to"/><br/>
+                            <t t-if="analytic_account">
+                                <strong><span t-esc="labels['analytic']"/></strong> <span t-esc="analytic_account.display_name"/><br/>
+                            </t>
+                            <t t-if="partner">
+                                <strong><span t-esc="labels['partner']"/></strong> <span t-esc="partner.display_name"/><br/>
+                            </t>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                         <div class="col-12" style="font-size: 1.2em; background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
+                             <strong><span t-esc="labels['opening_balance']"/></strong> 
+                             <span t-esc="opening_balance" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                         </div>
+                    </div>
+
+                    <table class="table table-sm table-bordered mt-4">
+                        <thead class="thead-light" style="background-color: #f2f2f2; font-size: 0.85rem;">
+                            <tr style="text-align: center;">
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Number</th>
+                                <th><span t-esc="labels['col_ref']"/></th>
+                                <th><span t-esc="labels['col_label']"/></th>
+                                <th><span t-esc="labels['col_partner']"/></th>
+                                <th><span t-esc="labels['col_analytic']"/></th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                                <th class="text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 0.8rem;">
+                            <tr t-foreach="docs" t-as="line">
+                                <td style="text-align: center;"><span t-esc="line['date']"/></td>
+                                <td><span t-esc="line['move_type']"/></td>
+                                <td><span t-esc="line['ref']"/></td>
+                                <td><span t-esc="line['entry_ref']"/></td>
+                                <td><span t-esc="line['name']"/></td>
+                                <td><span t-esc="line['partner']"/></td>
+                                <td><span t-esc="line['analytic']"/></td>
+                                <td class="text-right">
+                                    <span t-esc="line['debit']" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="line['credit']" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                                <td class="text-right" style="font-weight: bold;">
+                                    <span t-esc="line['balance']" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr style="font-weight: bold; background-color: #e9ecef; font-size: 0.9em;">
+                                <td colspan="7" class="text-right" t-att-style="'text-align: left;' if lang == 'ar_001' else 'text-align: right;'">
+                                    Total Balance
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="total_debit" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="total_credit" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                                <td class="text-right" style="background-color: #ced4da;">
+                                    <span t-esc="closing_balance" t-options='{"widget": "monetary", "display_currency": company.currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_gl_statement" model="ir.actions.report">
+        <field name="name">GL Statement of Account</field>
+        <field name="model">gl.statement.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_statement_report.gl_statement_template</field>
+        <field name="report_file">account_statement_report.gl_statement_template</field>
+        <field name="binding_model_id" ref="model_gl_statement_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
